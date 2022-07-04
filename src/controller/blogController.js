@@ -3,13 +3,13 @@ const authorModel = require("../models/authorModel")
 
 const isValid = function(value){
     if(typeof value === "undefined" || value === null ) return false
-    if(typeof value === "string" || value.trim().length === 0 ) return false
+    if(typeof value === "string" && value.trim().length === 0 ) return false
     return true
   }
   
-  const isValidTitle = function(title){
-    return ["Mr", "Ms", "Miss"].indexOf(title) !== -1
-  }
+//   const isValidTitle = function(title){
+//     return ["Mr", "Ms", "Miss"].indexOf(title) !== -1
+//   }
   
   const isValidRequestBody = function(requestBody){
     return Object.keys(requestBody).length > 0
@@ -20,17 +20,17 @@ const createBlog=async function(req, res){
         let reqData = req.body
         if (!isValidRequestBody(reqData)) return res.status(400).send({ status: false, msg: "Body is Required"});
         
-        if(isValidTitle(reqData.title)){
+        if(!isValid(reqData.title)){
             res.status(400).send({status: false, msg: "Title is required"})          
             return
         }
         
-        if(isValid(reqData.authorId)){
+        if(!isValid(reqData.authorId)){
             res.status(400).send({status: false, msg: "Author Id is required"})          
             return
         }
 
-        if(isValid(reqData.category)){                
+        if(!isValid(reqData.category)){                
             res.status(400).send({status: false, msg: "Category is required"})
             return
         }
@@ -55,6 +55,7 @@ const createBlog=async function(req, res){
 const getBlogs = async function(req, res){
     try{
         let queryData= req.query
+     
         if (isValidRequestBody(queryData)) {
             let findByQuery = await blogsModel.find({ $and: [{ isDeleted: false }, { isPublished: true }, queryData] } )
             if (findByQuery.length == 0) {
@@ -101,7 +102,7 @@ const updateBlogs = async function(req, res){
             }
         }
         
-        if (data.category) {
+        if (data.subcategory) {
             if (typeof data.subcategory == "object") {
                 blogData.subcategory.push(...data.subcategory);
             } else {

@@ -22,12 +22,12 @@ const blogSchema=new mongoose.Schema({
     type:[String],
     trim: true
   },
-  category: [{type:[String],
+  category: {type:String,
     trim: true,
-    require: true}]
+    require: true}
   ,
   subcategory:
-    [{type:[String],
+    [{type:String,
     trim: true}]
   ,
   deletedAt:{
